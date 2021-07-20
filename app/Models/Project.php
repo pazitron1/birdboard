@@ -14,4 +14,13 @@ class Project extends Model
      * @var array
      */
     protected $guarded = [];
+
+    /**
+     * Project path
+     * @return string
+     */
+    public function path()
+    {
+        return "projects/$this->id";
+    }
 }
