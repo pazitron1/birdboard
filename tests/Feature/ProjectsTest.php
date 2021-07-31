@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use Tests\TestCase;
+use App\Models\User;
 use App\Models\Project;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -12,19 +13,27 @@ class ProjectsTest extends TestCase
     use WithFaker, RefreshDatabase;
 
     /** @test */
+    public function only_authenticated_users_can_create_a_project()
+    {
+        $attributes = Project::factory()->raw();
+
+        $this->post('projects', $attributes)->assertRedirect('login');
+    }
+
+    /** @test */
     public function a_user_can_create_a_project()
     {
         $this->withoutExceptionHandling();
-        //Arrange
+        $this->actingAs($user = User::factory()->create());
+
         $attributes = [
             'title' => $this->faker->sentence(),
-            'description' => $this->faker->paragraph()
+            'description' => $this->faker->paragraph(),
+            'owner_id' => $user->id
         ];
 
-        //Act
         $this->post('projects', $attributes)->assertRedirect('projects');
 
-        //Assert
         $this->assertDatabaseHas('projects', $attributes);
         $this->get('projects')->assertSee($attributes['title']);
     }
@@ -32,6 +41,7 @@ class ProjectsTest extends TestCase
     /** @test */
     public function a_project_requires_a_title()
     {
+        $this->actingAs(User::factory()->create());
         $attributes = Project::factory()->raw(['title' => '']);
         $this->post('projects', $attributes)->assertSessionHasErrors('title');
     }
@@ -39,6 +49,7 @@ class ProjectsTest extends TestCase
     /** @test */
     public function a_project_requires_a_description()
     {
+        $this->actingAs(User::factory()->create());
         $this->post('projects', [])->assertSessionHasErrors('description');
     }
 
@@ -46,12 +57,8 @@ class ProjectsTest extends TestCase
     public function a_user_can_view_a_project()
     {
         $this->withoutExceptionHandling();
-        //Arrange
-        // We have a project
         $project = Project::factory()->create();
 
-        //Act
-        // A user visits the project
         $this->get($project->path())
             ->assertSee($project->title)
             ->assertSee($project->description);
