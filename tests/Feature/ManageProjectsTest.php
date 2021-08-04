@@ -8,35 +8,26 @@ use App\Models\Project;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProjectsTest extends TestCase
+class ManageProjectsTest extends TestCase
 {
     use WithFaker, RefreshDatabase;
 
     /** @test */
-    public function guests_cannot_create_a_project()
-    {
-        $attributes = Project::factory()->raw();
-
-        $this->post('projects', $attributes)->assertRedirect('login');
-    }
-
-    /** @test */
-    public function gests_cannot_view_projects()
-    {
-        $this->get('projects')->assertRedirect('login');
-    }
-
-    /** @test */
-    public function guests_cannot_view_a_single_project()
+    public function guests_cannot_control_a_project()
     {
         $project = Project::factory()->create();
 
+        $this->post('projects', $project->toArray())->assertRedirect('login');
+        $this->get('projects')->assertRedirect('login');
+        $this->get('projects/create')->assertRedirect('login');
         $this->get($project->path())->assertRedirect('login');
     }
+
 
     /** @test */
     public function a_user_can_create_a_project()
     {
+        $this->withoutExceptionHandling();
         $this->be($user = User::factory()->create());
 
         $attributes = [
@@ -44,6 +35,8 @@ class ProjectsTest extends TestCase
             'description' => $this->faker->paragraph(),
             'owner_id' => $user->id
         ];
+
+        $this->get('projects/create')->assertOk();
 
         $this->post('projects', $attributes)->assertRedirect('projects');
         $this->assertDatabaseHas('projects', $attributes);
