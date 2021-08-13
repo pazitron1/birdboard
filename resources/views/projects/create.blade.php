@@ -1,10 +1,6 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create project</title>
-</head>
-<body>
+@extends('layouts.app')
+
+@section('content')
     <h1>New project</h1>
     <form method="POST" action="{{route('projects.store')}}">
         @csrf
@@ -18,7 +14,7 @@
 
         <div>
             <button type="submit">Create project</button>
+            <a href="/projects">Cancel</a>
         </div>
     </form>
-</body>
-</html>
+@endsection

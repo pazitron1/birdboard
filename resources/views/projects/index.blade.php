@@ -1,17 +1,17 @@
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Birdboard</h1>
-    <ul>
+@extends('layouts.app')
+
+@section('content')
+    <header class="my-4">
+        <h1 class="text-gray-400 text-2xl">My projects</h1>
+    </header>
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 lg:gap-4">
         @forelse($projects as $project)
-            <li><a href="{{$project->path() }}">{{$project->title}}</a></li>
+            <div class="bg-white mr-4 rounded-md shadow w-full p-5" style="height:200px;">
+                <a href="{{$project->path()}}" class="text-lg py-2 font-normal -ml-5 border-l-2 pl-4 border-indigo-500">{{ $project->title }}</a>
+                <div class="text-sm text-gray-500 mt-4">{{ Str::limit($project->description, 150) }}</div>
+            </div>
         @empty
-            <li>There are no projects yet.</li>
+            <div>No projects yet...</div>
         @endforelse
-    </ul>
-</body>
-</html>
+    </div>
+@endsection
