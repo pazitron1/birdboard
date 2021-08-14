@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -25,6 +26,26 @@ class Project extends Model
         return "projects/$this->id";
     }
 
+    /**
+     * @param string $body
+     * @return mixed
+     */
+    public function addTask(string $body)
+    {
+        return $this->tasks()->create(compact('body'));
+    }
+
+    /**
+     * @return HasMany
+     */
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
+    }
+
+    /**
+     * @return BelongsTo
+     */
     public function owner(): BelongsTo
     {
         return $this->belongsTo(User::class);

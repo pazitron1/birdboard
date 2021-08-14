@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProjectsController;
+use App\Http\Controllers\ProjectTasksController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,19 +19,34 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-
-Route::get('projects/create', [ProjectsController::class, 'create'])->name('projects.create');
-
+Route::get('projects/create', [ProjectsController::class, 'create'])->name(
+    'projects.create'
+);
 
 Route::group(['middleware' => 'auth'], function () {
-    Route::get('projects', [ProjectsController::class, 'index'])->name('projects.index');
-    Route::get('projects/create', [ProjectsController::class, 'create'])->name('projects.create');
-    Route::get('projects/{project}', [ProjectsController::class, 'show'])->name('projects.show');
-    Route::post('projects', [ProjectsController::class, 'store'])->name('projects.store');
+    Route::get('projects', [ProjectsController::class, 'index'])->name(
+        'projects.index'
+    );
+    Route::get('projects/create', [ProjectsController::class, 'create'])->name(
+        'projects.create'
+    );
+    Route::get('projects/{project}', [ProjectsController::class, 'show'])->name(
+        'projects.show'
+    );
+    Route::post('projects', [ProjectsController::class, 'store'])->name(
+        'projects.store'
+    );
+
+    Route::post('projects/{project}/tasks', [
+        ProjectTasksController::class,
+        'store'
+    ])->name('projects.tasks.store');
 });
 
 Route::get('/dashboard', function () {
     return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+})
+    ->middleware(['auth'])
+    ->name('dashboard');
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
