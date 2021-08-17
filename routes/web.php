@@ -41,6 +41,11 @@ Route::group(['middleware' => 'auth'], function () {
         ProjectTasksController::class,
         'store'
     ])->name('projects.tasks.store');
+
+    Route::patch('projects/{project}/tasks/{task}', [
+        ProjectTasksController::class,
+        'update'
+    ])->name('projects.tasks.update');
 });
 
 Route::get('/dashboard', function () {

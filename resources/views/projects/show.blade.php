@@ -13,7 +13,13 @@
                 <h2 class="text-gray-500 text-lg" mb-3>Tasks</h2>
                 @foreach($project->tasks as $task)
                     <x-card>
-                        {{ $task->body }}
+                        <form class="flex justify-between items-center" action="{{ route('projects.tasks.update', [$project, $task]) }}" method="POST">
+                            @method('PATCH')
+                            @csrf
+                            <label class="sr-only" for="body">Task name</label>
+                            <input name="body" class="w-full outline-none focus:outline-none {{ $task->completed ? 'text-gray-400 line-through' : 'text-gray-900' }}" value="{{ $task->body }}">
+                            <input type="checkbox" name="completed" onChange="this.form.submit()" {{$task->completed ? 'checked' : ''}}>
+                        </form>
                     </x-card>
                 @endforeach
                 <x-card>
