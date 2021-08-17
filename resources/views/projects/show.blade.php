@@ -11,13 +11,18 @@
         <div class="w-3/4">
             <div class="mb-8">
                 <h2 class="text-gray-500 text-lg" mb-3>Tasks</h2>
-                @forelse($project->tasks as $task)
+                @foreach($project->tasks as $task)
                     <x-card>
                         {{ $task->body }}
                     </x-card>
-                @empty
-                    <p class="text-base text-gray-500">This project does not have tasks.</p>
-                @endforelse
+                @endforeach
+                <x-card>
+                    <form action="{{ route('projects.tasks.store', $project) }}" method="POST">
+                        @csrf
+                        <label class="sr-only" for="body">Task name</label>
+                        <input name="body" class="w-full outline-none focus:outline-none" placeholder="Add a new task">
+                    </form>
+                </x-card>
             </div>
             <div class="mb-8">
                 <h2 class="text-gray-500 text-lg mb-3">General notes</h2>

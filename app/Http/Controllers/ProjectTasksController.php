@@ -13,6 +13,12 @@ class ProjectTasksController extends Controller
      */
     public function store(Project $project)
     {
+        abort_if(
+            auth()
+                ->user()
+                ->isNot($project->owner),
+            403
+        );
         request()->validate([
             'body' => 'required'
         ]);

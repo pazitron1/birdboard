@@ -45,4 +45,18 @@ class ProjectTasksTest extends TestCase
 
         $this->assertEquals(0, $project->tasks->count());
     }
+
+    /** @test */
+    public function only_the_owner_of_the_project_may_add_tasks()
+    {
+        $this->signIn();
+
+        $project = Project::factory()->create();
+
+        $this->post($project->path() . '/tasks', [
+            'body' => 'Test task'
+        ])->assertStatus(403);
+
+        $this->assertDatabaseMissing('tasks', ['body' => 'Test task']);
+    }
 }
