@@ -16,6 +16,11 @@ class Task extends Model
      */
     protected $guarded = [];
 
+    /**
+     * @var string[]
+     */
+    protected $touches = ['project'];
+
     public function path()
     {
         return '/projects/' . $this->project->id . '/tasks/' . $this->id;
