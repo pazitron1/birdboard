@@ -32,9 +32,20 @@
             </div>
             <div class="mb-8">
                 <h2 class="text-gray-500 text-lg mb-3">General notes</h2>
-                <x-card>
-                    Lorem ipsum dolor sit amet consectetur adipisicing elit. Eos necessitatibus, suscipit voluptatibus ullam ea eligendi ad debitis deserunt, modi maxime explicabo nesciunt assumenda esse accusantium sunt, ab repellendus iusto saepe.
-                </x-card>
+                <form action="{{ route('projects.update', $project) }}" method="POST">
+                    @method('PATCH')
+                    @csrf
+                    <x-card class="mb-8">
+                        <textarea
+                            class="border-0 w-full outline-none focus:outline-none focus:ring-transparent"
+                            name="notes"
+                            cols="30"
+                            rows="4"
+                            placeholder="Any special notes for this project?"
+                        >{{ $project->notes }}</textarea>
+                    </x-card>
+                    <button class="relative inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-indigo-500" type="submit">Save</button>
+                </form>
             </div>
         </div>
         <div class="w-1/4">
