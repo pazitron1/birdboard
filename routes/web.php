@@ -33,6 +33,10 @@ Route::group(['middleware' => 'auth'], function () {
     Route::get('projects/{project}', [ProjectsController::class, 'show'])->name(
         'projects.show'
     );
+    Route::get('projects/{project}/edit', [
+        ProjectsController::class,
+        'edit'
+    ])->name('projects.edit');
     Route::patch('projects/{project}', [
         ProjectsController::class,
         'update'

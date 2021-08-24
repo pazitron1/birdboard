@@ -3,6 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Project;
+use Illuminate\Contracts\View\View;
+use Illuminate\Contracts\View\Factory;
+use Illuminate\Contracts\Foundation\Application;
 
 class ProjectsController extends Controller
 {
@@ -33,12 +36,23 @@ class ProjectsController extends Controller
         $this->authorize('update', $project);
 
         $attributes = request()->validate([
+            'title' => 'required',
+            'description' => 'required|max:255',
             'notes' => 'min:3'
         ]);
 
         $project->update($attributes);
 
         return redirect($project->path());
+    }
+
+    /**
+     * @param Project $project
+     * @return Application|Factory|View
+     */
+    public function edit(Project $project)
+    {
+        return view('projects.edit', compact('project'));
     }
 
     public function show(Project $project)

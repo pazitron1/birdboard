@@ -20,6 +20,7 @@ class ManageProjectsTest extends TestCase
         $this->post('projects', $project->toArray())->assertRedirect('login');
         $this->get('projects')->assertRedirect('login');
         $this->get('projects/create')->assertRedirect('login');
+        $this->get($project->path() . '/edit')->assertRedirect('login');
         $this->get($project->path())->assertRedirect('login');
     }
 
@@ -56,10 +57,14 @@ class ManageProjectsTest extends TestCase
             ->patch(
                 $project->path(),
                 $attributes = [
+                    'title' => 'new title',
+                    'description' => 'new description',
                     'notes' => 'Updated notes'
                 ]
             )
             ->assertRedirect($project->path());
+
+        $this->get($project->path() . '/edit')->assertOk();
 
         $this->assertDatabaseHas('projects', $attributes);
         $this->get($project->path())->assertSee('Updated notes');
