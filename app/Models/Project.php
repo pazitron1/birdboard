@@ -50,4 +50,12 @@ class Project extends Model
     {
         return $this->belongsTo(User::class, 'owner_id', 'id');
     }
+
+    /**
+     * @return HasMany
+     */
+    public function activity(): HasMany
+    {
+        return $this->hasMany(Activity::class);
+    }
 }
