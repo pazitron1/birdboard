@@ -17,6 +17,24 @@ class Task extends Model
     protected $guarded = [];
 
     /**
+     * The attributes that should be cast.
+     *
+     * @var array
+     */
+    protected $casts = [
+        'completed' => 'boolean'
+    ];
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::created(function ($task) {
+            $task->project->recordactivity('task_created');
+        });
+    }
+
+    /**
      * @var string[]
      */
     protected $touches = ['project'];
@@ -24,6 +42,13 @@ class Task extends Model
     public function path()
     {
         return '/projects/' . $this->project->id . '/tasks/' . $this->id;
+    }
+
+    public function complete()
+    {
+        $this->update(['completed' => true]);
+
+        $this->project->recordActivity('task_completed');
     }
 
     /**
