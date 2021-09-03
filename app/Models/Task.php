@@ -25,15 +25,6 @@ class Task extends Model
         'completed' => 'boolean'
     ];
 
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::created(function ($task) {
-            $task->project->recordactivity('task_created');
-        });
-    }
-
     /**
      * @var string[]
      */
@@ -47,13 +38,13 @@ class Task extends Model
     public function complete()
     {
         $this->update(['completed' => true]);
-
         $this->project->recordActivity('task_completed');
     }
 
     public function incomplete()
     {
         $this->update(['completed' => false]);
+        $this->project->recordActivity('task_incompleted');
     }
 
     /**
