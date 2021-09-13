@@ -10,10 +10,13 @@
             <li>You updated the project <span class="text-gray-400">{{$activity->created_at->diffForHumans(null, null, true)}}</span></li>
 
         @elseif($activity->description === 'task_created')
-            <li>You created a task <span class="text-gray-400">{{$activity->created_at->diffForHumans(null, null, true)}}</span></li>
+            <li>You created <b>{{ $activity->subject->body }}</b> <span class="text-gray-400">{{$activity->created_at->diffForHumans(null, null, true)}}</span></li>
 
         @elseif($activity->description === 'task_completed')
-            <li>You completed a tast <span class="text-gray-400">{{$activity->created_at->diffForHumans(null, null, true)}}</span></li>
+            <li>You completed <b>{{ $activity->subject->body }}</b> <span class="text-gray-400">{{$activity->created_at->diffForHumans(null, null, true)}}</span></li>
+
+        @elseif($activity->description === 'task_incompleted')
+            <li>You incompleted  <b>{{ $activity->subject->body }}</b> <span class="text-gray-400">{{$activity->created_at->diffForHumans(null, null, true)}}</span></li>
 
         @else
             <li>{{ $activity->description }} <span class="text-gray-400">{{$activity->created_at->diffForHumans(null, null, true)}}</span></li>
